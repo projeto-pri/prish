@@ -12,3 +12,5 @@ Um NUMPAD bluetooth que é somente um teclado númerico é bem interessante.
 
 ## Como contribuir?
 https://github.com/projeto-pri/prish/blob/master/CONTRIBUTING.md
+
+## Type Coding (Desenvolvedor LEIA)
