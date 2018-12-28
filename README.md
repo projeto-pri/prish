@@ -19,7 +19,9 @@ Basta plugar a sua LIVEcd baixar o **PRIsh** e por o bash para interpretar. Fác
 - Criando uma documentação mais amigável e completa
 - Com ideias
 - Com Doações (Destinada para montar simples equipamentos e doar a hospitais)
+- Ajudando na divulgação, assim o projeto chega a quem precisa
 
 ## Changelog
 
 ## Type Coding (Desenvolvedor LEIA)
+https://github.com/projeto-pri/prish/blob/master/CONTRIBUTING.md
