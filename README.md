@@ -8,5 +8,7 @@ Foi ai que surgiu a ideia deste software livre, um simples script em shell que t
 Para este projeto o ideal é ter um notebook/rasperry/orange ou BananaPI que são equipamentos pequenos e com algum tipo de caixa de som.
 Um NUMPAD bluetooth que é somente um teclado númerico é bem interessante.
 
-## Como contribuir?
+## Site do Projeto
 
+## Como contribuir?
+https://github.com/projeto-pri/prish/blob/master/CONTRIBUTING.md
