@@ -31,6 +31,7 @@ Basta plugar a sua LIVEcd baixar o **PRIsh** e por o bash para interpretar. Fác
 
 
 ## Changelog
+https://github.com/projeto-pri/prish/blob/master/CHANGELOG.md
 
 ## Type Coding (Desenvolvedor LEIA)
 https://github.com/projeto-pri/prish/blob/master/CONTRIBUTING.md
