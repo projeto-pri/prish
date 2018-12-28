@@ -8,6 +8,7 @@ Foi ai que surgiu a ideia deste software livre, um simples script em shell que t
 Para este projeto o ideal é ter um notebook/rasperry/orange ou BananaPI que são equipamentos pequenos e com algum tipo de caixa de som.
 Um NUMPAD bluetooth que é somente um teclado númerico é bem interessante.
 
+O projeto está focado em ter um aplicativo que é executado 200% offline, por isso tudo que é online é descartado aqui.
 
 ## A história de tudo isso
 https://youtu.be/SLZFqMDMtJQ
