@@ -14,6 +14,10 @@ O projeto está focado em ter um aplicativo que é executado 200% offline, por i
 https://youtu.be/SLZFqMDMtJQ
 
 
+## Como instalar?
+
+
+
 ## Por que em Shell?
 Por ser simples e direto, você necessita de uma distribuição GNU/Linux que graças ao movimento da tecnologia não é preciso nem estar instalado no sistema.
 Basta plugar a sua LIVEcd baixar o **PRIsh** e por o bash para interpretar. Fácil não é? O resto deixa que o programa faz.
