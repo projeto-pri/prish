@@ -1,4 +1,4 @@
-# PRIsh :heater:
+# PRIsh :heat:
 
 ## O que é PRIsh?
 Prish faz parte do **Projeto PRI**. é um utilitário em linha de comando criado em shell e visa ajudar as pessoas que estão passando por alguma necessidade fisica/mental e não consegue se comunicar com as pessoas.
