@@ -8,11 +8,18 @@ Foi ai que surgiu a ideia deste software livre, um simples script em shell que t
 Para este projeto o ideal é ter um notebook/rasperry/orange ou BananaPI que são equipamentos pequenos e com algum tipo de caixa de som.
 Um NUMPAD bluetooth que é somente um teclado númerico é bem interessante.
 
+
+## A história de tudo isso
+https://youtu.be/SLZFqMDMtJQ
+
+
 ## Por que em Shell?
 Por ser simples e direto, você necessita de uma distribuição GNU/Linux que graças ao movimento da tecnologia não é preciso nem estar instalado no sistema.
 Basta plugar a sua LIVEcd baixar o **PRIsh** e por o bash para interpretar. Fácil não é? O resto deixa que o programa faz.
 
+
 ## Site do Projeto
+
 
 ## Como contribuir?
 - Codando
@@ -20,6 +27,7 @@ Basta plugar a sua LIVEcd baixar o **PRIsh** e por o bash para interpretar. Fác
 - Com ideias
 - Com Doações (Destinada para montar simples equipamentos e doar a hospitais)
 - Ajudando na divulgação, assim o projeto chega a quem precisa
+
 
 ## Changelog
 
