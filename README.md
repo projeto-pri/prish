@@ -30,7 +30,7 @@ Basta plugar a sua LIVEcd baixar o **PRIsh** e por o bash para interpretar. Fác
 - Codando
 - Criando uma documentação mais amigável e completa
 - Com ideias
-- Com Doações (Destinada para montar simples equipamentos e doar a hospitais)
+- Com Doações (Destinada para montar simples equipamentos e doar a hospitais ou pessoas que necessitam)
 - Ajudando na divulgação, assim o projeto chega a quem precisa
 
 
