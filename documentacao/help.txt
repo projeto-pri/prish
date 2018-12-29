@@ -1,11 +1,27 @@
-prish [opções]
+NOME
+	prish
 
 USO
--h, --help 
-   Exibe está opção de ajuda
+	./prish [opção]
+
+EXEMPLO
+	./prish -s
+
+DESCRIÇÂO
+	O programa "prish" tem a função de ajudar pessoas que possuem apenas uma mão para 
+	poder se comunicar.
+	O programa exibe exibirá um menu com frases pré-programadas, onde o usuario podera 
+	escolher aquela que represente melhor o que ele quer transmitir.
+
+	Opções do programa:
+
+	-h, --help
+			Mostra ajuda do programa.
+
+	-s		Inicia o programa.
 
 AUTOR
- Jefferson 'Slackjeff' Rocha
+	Jefferson 'Slackjeff' Rocha
 
 BUGS
- root@slackjeff.com.br
+	root@slackjeff.com.br
