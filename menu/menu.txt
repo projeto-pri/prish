@@ -1,15 +1,6 @@
-######################## BÁSICO
-# Estou com Fome
-# Estou com Sede
-# Preciso ir ao banheiro
- Me dê o remédio
-# 
-
-######################## SENTIMENTOS
-  Eu te amo
-# Me dê um abraço
-
-######################## DOR
-  Estou com dor
-
-
+Estou com fome
+#Me de um abraço
+#Estou com dor
+#Estou com Frio
+Você pode me dar um remédio?
+#Preciso de uma abraço
