@@ -1,4 +1,4 @@
-======> Versão 0.3 (Jefferson Rocha)
+## Versão 0.3 (Jefferson Rocha)
 - Arrumado bug das casas. Anteriormente funcionava na entrada somente com 1 casa.
   Agora se o limit_menut for maior que 9 ele altera para 2 casas.
 - Retirado a função BAR, que exibia a barra. Muita informação na tela não é legal.
@@ -11,7 +11,7 @@
 - Adicionado um bloco de carregamento de variáveis padrão se caso o usuário não por chaves númericas
   no arquivo de configuração.
 
-======> Versão 0.2 (Jefferson Rocha)
+## Versão 0.2 (Jefferson Rocha)
 - Adiciona opções -h, --help
 - A documentação de ajuda está agora externamente no diretório
   documentacao/help.txt
