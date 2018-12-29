@@ -1,6 +1,8 @@
+## Versão 0.5 ( Jefferson Rocha )
+- Substituido play do sox pelo paplay do pulseaudio
+
 ## Versão 0.4 ( Jefferson Rocha )
 - Trocado expansões de variáveis na entrada por somente 1 sed.
-
 
 ## Versão 0.3 ( Jefferson Rocha )
 - Arrumado bug das casas. Anteriormente funcionava na entrada somente com 1 casa.

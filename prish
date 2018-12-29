@@ -21,7 +21,7 @@
 
 #================= VARIÁVEIS
 name='prish'              # Nome do Projeto
-version='0.4'             # Versão
+version='0.5'             # Versão
 sound='sons'              # Diretório das vozes.
 doc='documentacao'        # Diretório da documentação.
 menu='menu'               # Diretório do menu
@@ -169,11 +169,11 @@ _MAIN() # Função que faz a rotina principal
          cd $sound # Entrando no diretório sound
          # Verificando se arquivo existe
          if [ ! -e "${show_me[$operation]}.ogg" ]; then
-             echo -e "\n${show_me[$operation]} não existe."
+             echo -e "\n${show_me[$operation]} não encontrado no diretório $sound."
              _SLEEP "$timer"
              return 1
          fi
-         play -q ${show_me[$operation]}.ogg # Tudo ocorreu bem? Então toca.
+         paplay ${show_me[$operation]}.ogg # Tudo ocorreu bem? Então toca.
       )
    done # Loop principal
 }
