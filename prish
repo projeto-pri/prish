@@ -21,7 +21,7 @@
 
 #================= VARIÁVEIS
 name='prish'              # Nome do Projeto
-version='0.3'             # Versão
+version='0.4'             # Versão
 sound='sons'              # Diretório das vozes.
 doc='documentacao'        # Diretório da documentação.
 menu='menu'               # Diretório do menu
@@ -125,7 +125,7 @@ _MAIN() # Função que faz a rotina principal
              elif [[ "$print_me" =~ ^# ]]; then # Inicio da linha com # ? Não imprima.
                 { i=$((i-1)); continue;}
              fi
-             echo -e "${bgmenu}[ ${i} ]${endcolor} ${txtcolor} $print_me ${endcolor}" # Imprimindo com incremento.
+             echo -e "${bgmenu}\[ ${i} ]${endcolor} ${txtcolor} $print_me ${endcolor}" # Imprimindo com incremento.
              show_me[$i]="$print_me" # pegando no vetor todas opções
              [ "$i" = "$limit_menu" ] && break # Verficando o limite máximo do menu.
           done < "$menu"
@@ -150,20 +150,26 @@ _MAIN() # Função que faz a rotina principal
           continue
       fi
       
-      # Removendo acentuações e outras besteirinhas.
-      show_me[$operation]=$(echo "${show_me[$operation]}" | sed 'y/áÁàÀãÃâÂéÉêÊíÍóÓõÕôÔúÚüÜçÇ/aAaAaAaAeEeEiIoOoOoOuUuUcC/')
-
       # Convertendo toda entrada em minusculo
       show_me[$operation]=${show_me[$operation],,}
 
-      # Trocando espaços por -
-      show_me[$operation]=${show_me[$operation]// /-}
+      # sedzinho básico para remover alguns caracteres e converter o que
+      # não precisamos.
+      show_me[$operation]=$(
+           echo "${show_me[$operation]}" |
+           sed '
+             y/áÁàÀãÃâÂéÉêÊíÍóÓõÕôÔúÚüÜçÇ/aAaAaAaAeEeEiIoOoOoOuUuUcC/ ;
+             s/[,.;?!]//g ;                           
+             s/^[[:space:]]*//;                           
+             s/ /-/g;
+             s/\r//g'
+      )
 
       ( # Abertura de subshell
          cd $sound # Entrando no diretório sound
          # Verificando se arquivo existe
          if [ ! -e "${show_me[$operation]}.ogg" ]; then
-             echo -e "\n${show_me[$operation]}, NÃO EXISTE no diretório '$sound'"
+             echo -e "\n${show_me[$operation]} não existe."
              _SLEEP "$timer"
              return 1
          fi

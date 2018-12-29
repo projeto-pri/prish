@@ -1,16 +1,16 @@
 ######################## SAUDAÇÕES
-# Oi, tudo bem?
-# Bom dia!
-# Boa tarde! 
-# Boa noite!
-# Como foi seu dia?
-# Obrigado!
+     Oi, tudo bem?
+ Bom dia!
+ Boa tarde! 
+ Boa noite!
+ Como foi seu dia?
+ Obrigado!
 # Obrigada!
 # Tchau
 # Até logo
 
 ######################## BÁSICO
-# Estou com Fome
+ Estou com Fome
 # Estou com Sede
 # Eu preciso usar o banheiro
 # Eu preciso tomar banho
