@@ -21,13 +21,21 @@
 
 #================= VARIÁVEIS
 name='prish'              # Nome do Projeto
-version='0.2'             # Versão
+version='0.3'             # Versão
 sound='sons'              # Diretório das vozes.
 doc='documentacao'        # Diretório da documentação.
 menu='menu'               # Diretório do menu
-menu_cache_one='/tmp/menu.cache' # Arquivo de cache do menu
-menu_cache_two='/tmp/menu.cache2' # Arquivo de cache do menu
 #================= TEST
+
+# Carregamento de variáveis!
+# Caso as variáveis de ambiente da prish não estão
+# com suas respectivas numerações/chaves por falta
+# de atenção do usuário, elas carregarão como padrão definidas.
+[[ "$limit_menu" =~ [0-9] ]]   ||  limit_menu="${LIMIT_MENU:-9}"
+[[ "$timer" =~ [0-9] ]]        ||  timer="${TIMER:-2}"
+[[ "$color_key" =~ [0-9] ]]    ||  color_key="${COLOR_KEY:-0}"
+[[ "$color_number" =~ [0-9] ]] ||  color_number="${COLOR_NUMBER:-1}"
+[[ "$color_text" =~ [0-9] ]]   ||  color_text="${COLOR_TEXT:-7}"
 
 # Utilizar cores na saída?
 # Se sim vamos puxar qual o valor o usuario(a) definiu
@@ -89,14 +97,6 @@ _HELP() # Exibe a opção de ajuda
    done < "${doc}/help.txt"
 }
 
-_BAR() # Barra de informações
-{      # Esta barra ainda não tem um objetivo ao certo;
-       # Se alguém achar algum dado interessante para por nesta barra
-       # fique a vontade.
-   echo "Nome do Paciente: $name | Idade: $age"
-   # Linha responsiva
-   printf '%*s\n\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
-}
 
 _SLEEP() # Função para adormecer em determinados momentos.
 {
@@ -111,25 +111,37 @@ _MAIN() # Função que faz a rotina principal
    while :; do
       # Verificando se chaves estão ligadas.
       clear # Limpa a tela ae
-      [ "$bar" = '0' ] && _BAR
       i='0' # var de incremento.
-      # FIXME: Precisa fazer um esquema do menu em cache.
-      # Este bloco de impressão está um pouco lento.
       # Printando na tela
           while IFS= read -r print_me; do
              i=$((i+1))
-             # Se ter um # é sinal que não é para ser imprimido no menu.
-             echo "$print_me" | grep -q "^#" && { i=$((i-1));continue;}
+             # Algumas verificações na linha antes de imprimir
+             if [[ "$print_me" =~ ^[[:space:]]*$ ]]; then # Linha vazia?
+                { i=$((i-1));continue;}
+             elif [[ ! "$print_me" =~ [a-zA-Z] ]]; then   # Não começa com Letras?
+                { i=$((i-1));continue;}
+             elif [[ "$print_me" =~ ^[[:space:]]+{1,} ]]; then # Tem espaço em qualquer quantidade no inicio?
+                print_me=$(echo "$print_me" | sed 's/^[[:space:]]*/ /g')
+             elif [[ "$print_me" =~ ^# ]]; then # Inicio da linha com # ? Não imprima.
+                { i=$((i-1)); continue;}
+             fi
              echo -e "${bgmenu}[ ${i} ]${endcolor} ${txtcolor} $print_me ${endcolor}" # Imprimindo com incremento.
              show_me[$i]="$print_me" # pegando no vetor todas opções
              [ "$i" = "$limit_menu" ] && break # Verficando o limite máximo do menu.
           done < "$menu"
 
-      # STDIN limitada a 1 caractere.
-      # Ou seja opção 10 11 20 50 não funciona e sim de 1-9.
-      # Isto para quando a pessoa apertar o número já ir automaticamente
-      # sem necessitar do enter.
-      read -n 1 -p $'\n' operation
+      # Verificando se o limit_menu é maior que 9
+      # Se for precisamos de duas casas númericas no STDIN.
+      if [ "$limit_menu" -gt "9" ]; then
+         # Limitado a 2 casas para não precisar de enter.
+         read -n 2 -p $'\n' operation
+      else      
+         # STDIN limitada a 1 caractere.
+         # Ou seja opção 10 11 20 50 não funciona e sim de 0-9.
+         # Isto para quando a pessoa apertar o número já ir automaticamente
+         # sem necessitar do enter.
+         read -n 1 -p $'\n' operation
+      fi
 
       # Checando se a entrada é numeral.
       if ! [ "$operation" -eq "$operation" ] 2>/dev/null; then
@@ -159,6 +171,7 @@ _MAIN() # Função que faz a rotina principal
       )
    done # Loop principal
 }
+
 
 #================= INICIO
 case $1 in
