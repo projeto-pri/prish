@@ -1,1 +1,11 @@
-lala
+prish [opções]
+
+USO
+-h, --help 
+   Exibe está opção de ajuda
+
+AUTOR
+ Jefferson 'Slackjeff' Rocha
+
+BUGS
+ root@slackjeff.com.br

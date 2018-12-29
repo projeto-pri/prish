@@ -13,20 +13,48 @@
 # Leia a documentação completa que se encontra externamente
 #
 #CHANGELOG
-#
+# Visualize o arquivo CHANGELOG.md para saber mais!
 #====================================================================|
 
 #================= BIBLIOTECAS
 . prish.conf # Carregando arquivo de configuração do sistema
 
 #================= VARIÁVEIS
-name='prish'             # Nome do Projeto
-version='0.1ab'        # Versão
-sound='sons'           # Diretório das vozes.
-doc='documentacao'     # Diretório da documentação.
-menu='menu'            # Diretório do menu
- 
+name='prish'              # Nome do Projeto
+version='0.2'             # Versão
+sound='sons'              # Diretório das vozes.
+doc='documentacao'        # Diretório da documentação.
+menu='menu'               # Diretório do menu
+menu_cache_one='/tmp/menu.cache' # Arquivo de cache do menu
+menu_cache_two='/tmp/menu.cache2' # Arquivo de cache do menu
 #================= TEST
+
+# Utilizar cores na saída?
+# Se sim vamos puxar qual o valor o usuario(a) definiu
+# no arquivo de configuração.
+if [ "$color_key" = "0" ]; then
+   case $color_number in # Fundo/cor Númerico
+       1) bgmenu='\e[37;41;1m';; # Fundo Vermelho com letra Branca
+       2) bgmenu='\e[37;44;1m';; # Fundo Azul com letra Branca
+       3) bgmenu='\e[30;43m'  ;; # Fundo Amarelo com letra Preta
+       4) bgmenu='\e[33;40;1m';; # Fundo Preto com letra Amarela
+       5) bgmenu='\e[31;42;1m';; # Fundo Verde com letra Vermelha
+       6) bgmenu='\e[30;46;1m';; # Fundo Cyano com letra Preta
+   esac
+   case $color_text in # Cor texto
+      1) txtcolor='\e[30;1m';; # Preto
+      2) txtcolor='\e[31;1m';; # Vermelho
+      3) txtcolor='\e[32;1m';; # Verde
+      4) txtcolor='\e[33;1m';; # Amarelo
+      5) txtcolor='\e[34;1m';; # Azul
+      6) txtcolor='\e[35;1m';; # Rosa
+      7) txtcolor='\e[36;1m';; # Ciano
+      8) txtcolor='\e[37;1m';; # Branco
+   esac
+   endcolor='\e[m' # Fechamento da cor.
+fi
+
+
 # Conferindo se todos os diretórios existem!
 directories=(
     "$sound"
@@ -54,9 +82,11 @@ for check in "${dep[@]}"; do
 done
 
 #================= FUNCÕES
-_HELP()
+_HELP() # Exibe a opção de ajuda
 {
-   echo
+   while IFS= read view; do
+       echo "$view"
+   done < "${doc}/help.txt"
 }
 
 _BAR() # Barra de informações
@@ -83,14 +113,17 @@ _MAIN() # Função que faz a rotina principal
       clear # Limpa a tela ae
       [ "$bar" = '0' ] && _BAR
       i='0' # var de incremento.
+      # FIXME: Precisa fazer um esquema do menu em cache.
+      # Este bloco de impressão está um pouco lento.
       # Printando na tela
-      while IFS= read -r print_me; do
-          i=$((i+1))
-          # Se ter um # é sinal que não é para ser imprimido no menu.
-          echo "$print_me" | grep -q "^#" && { i=$((i-1)); continue;}
-          echo "[ ${i} ] $print_me" # Imprimindo com incremento.
-          show_me[$i]="$print_me" # pegando no vetor todas opções
-      done < "$menu"
+          while IFS= read -r print_me; do
+             i=$((i+1))
+             # Se ter um # é sinal que não é para ser imprimido no menu.
+             echo "$print_me" | grep -q "^#" && { i=$((i-1));continue;}
+             echo -e "${bgmenu}[ ${i} ]${endcolor} ${txtcolor} $print_me ${endcolor}" # Imprimindo com incremento.
+             show_me[$i]="$print_me" # pegando no vetor todas opções
+             [ "$i" = "$limit_menu" ] && break # Verficando o limite máximo do menu.
+          done < "$menu"
 
       # STDIN limitada a 1 caractere.
       # Ou seja opção 10 11 20 50 não funciona e sim de 1-9.
@@ -131,4 +164,5 @@ _MAIN() # Função que faz a rotina principal
 case $1 in
     -s|--start) _MAIN ;;
     -h|--help)  _HELP ;;
+    *) echo "Para visualizar a opção de ajuda utilize: prish -h ou prish --help"
 esac
