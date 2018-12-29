@@ -158,7 +158,7 @@ _MAIN() # Função que faz a rotina principal
       show_me[$operation]=$(
            echo "${show_me[$operation]}" |
            sed '
-             y/áÁàÀãÃâÂéÉêÊíÍóÓõÕôÔúÚüÜçÇ/aAaAaAaAeEeEiIoOoOoOuUuUcC/ ;
+             s/áÁàÀãÃâÂéÉêÊíÍóÓõÕôÔúÚüÜçÇ/aAaAaAaAeEeEiIoOoOoOuUuUcC/ ;
              s/[,.;?!]//g ;                           
              s/^[[:space:]]*//;                           
              s/ /-/g;
