@@ -78,7 +78,7 @@ done
 # Adicione no vetor conforme ira aumentando
 # as dependencias da pri.
 dep=(
-   'play'
+   'paplay'
 )
 
 # Loop para varrer a array atrás das deps.
