@@ -18,7 +18,8 @@ DESCRIÇÂO
 	-h, --help
 			Mostra ajuda do programa.
 
-	-s		Inicia o programa.
+	-s	--start
+			Inicia o programa.
 
 AUTOR
 	Jefferson 'Slackjeff' Rocha
