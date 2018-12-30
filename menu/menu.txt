@@ -11,6 +11,7 @@
 
 ######################## BÁSICO
  Estou com Fome
+ Estou com Frio
 # Estou com Sede
 # Eu preciso usar o banheiro
 # Eu preciso tomar banho
