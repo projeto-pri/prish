@@ -1,3 +1,12 @@
+## Versão 0.6 ( Jefferson Rocha )
+- Adicionado função de escolha de vozes, agora contando com masculino e feminino.
+  usuário pode controlar no arquivo de configuração.
+- Retirado a opção -s, --start. Agora o programa executa sem o mesmo. Permanecido o parâmetro
+  de ajuda -h, --help.
+- Retirado função _HELP e criado uma função principal para impressões de arquivos de textos
+  intitulada _PRINT, assim é poupado repetições de código.
+- Adicionado logo no inicio do programa com slogan com efeito write utilizando o pv.
+
 ## Versão 0.5 ( Jefferson Rocha )
 - Substituido play do sox pelo paplay do pulseaudio
 

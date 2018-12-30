@@ -21,12 +21,9 @@
 
 #================= VARIÁVEIS
 name='prish'              # Nome do Projeto
-version='0.5'             # Versão
-sound='sons'              # Diretório das vozes.
-doc='documentacao'        # Diretório da documentação.
-menu='menu'               # Diretório do menu
-#================= TEST
+version='0.6'             # Versão
 
+#================= TEST
 # Carregamento de variáveis!
 # Caso as variáveis de ambiente da prish não estão
 # com suas respectivas numerações/chaves por falta
@@ -63,14 +60,17 @@ if [ "$color_key" = "0" ]; then
 fi
 
 
-# Conferindo se todos os diretórios existem!
-directories=(
-    "$sound"
-    "$doc"
-    "$menu"
+# Conferindo se todos os diretórios principais existem!
+# Ao decorrer do program está lista é usada para ir criando
+# variáveis.
+dir=(
+    "sons"
+    "documentacao"
+    "menu"
+    "logo"
 )
 
-for check_dir in "${directories[@]}"; do
+for check_dir in "${dir[@]}"; do
     [ ! -d "$check_dir" ] && { echo "Diretório '$check_dir' não foi encontrado!"; exit 1;}
 done
 
@@ -79,6 +79,7 @@ done
 # as dependencias da pri.
 dep=(
    'paplay'
+   'pv'
 )
 
 # Loop para varrer a array atrás das deps.
@@ -89,14 +90,25 @@ for check in "${dep[@]}"; do
     fi
 done
 
+# Verificando qual o gênero da voz será usado.
+# Se não for setado nada o padrão é o masculino.
+voice=$(echo "$voice" | tr [A-Z] [a-z] ) # Tudo em lower
+if [ "$voice" = "m" ]; then
+    sound="${dir[0]}/masculino/"
+elif [ "$voice" = "f" ]; then
+    sound="${dir[0]}/feminino/"
+else
+    sound="${dir[0]}/masculino"
+fi
+
 #================= FUNCÕES
-_HELP() # Exibe a opção de ajuda
+
+_PRINT() # Função de printa na tela
 {
    while IFS= read view; do
-       echo "$view"
-   done < "${doc}/help.txt"
+      echo "$view"
+   done < "$*"
 }
-
 
 _SLEEP() # Função para adormecer em determinados momentos.
 {
@@ -117,13 +129,13 @@ _MAIN() # Função que faz a rotina principal
              i=$((i+1))
              # Algumas verificações na linha antes de imprimir
              if [[ "$print_me" =~ ^[[:space:]]*$ ]]; then # Linha vazia?
-                { i=$((i-1));continue;}
+                 { i=$((i-1));continue;}
              elif [[ ! "$print_me" =~ [a-zA-Z] ]]; then   # Não começa com Letras?
-                { i=$((i-1));continue;}
+                 { i=$((i-1));continue;}
              elif [[ "$print_me" =~ ^[[:space:]]+{1,} ]]; then # Tem espaço em qualquer quantidade no inicio?
-                print_me=$(echo "$print_me" | sed 's/^[[:space:]]*/ /g')
+                 print_me=$(echo "$print_me" | sed 's/^[[:space:]]*/ /g')
              elif [[ "$print_me" =~ ^# ]]; then # Inicio da linha com # ? Não imprima.
-                { i=$((i-1)); continue;}
+                 { i=$((i-1)); continue;}
              fi
              echo -e "${bgmenu}\[ ${i} ]${endcolor} ${txtcolor} $print_me ${endcolor}" # Imprimindo com incremento.
              show_me[$i]="$print_me" # pegando no vetor todas opções
@@ -133,14 +145,14 @@ _MAIN() # Função que faz a rotina principal
       # Verificando se o limit_menu é maior que 9
       # Se for precisamos de duas casas númericas no STDIN.
       if [ "$limit_menu" -gt "9" ]; then
-         # Limitado a 2 casas para não precisar de enter.
-         read -n 2 -p $'\n' operation
+          # Limitado a 2 casas para não precisar de enter.
+          read -n 2 -p $'\n' operation
       else      
-         # STDIN limitada a 1 caractere.
-         # Ou seja opção 10 11 20 50 não funciona e sim de 0-9.
-         # Isto para quando a pessoa apertar o número já ir automaticamente
-         # sem necessitar do enter.
-         read -n 1 -p $'\n' operation
+          # STDIN limitada a 1 caractere.
+          # Ou seja opção 10 11 20 50 não funciona e sim de 0-9.
+          # Isto para quando a pessoa apertar o número já ir automaticamente
+          # sem necessitar do enter.
+          read -n 1 -p $'\n' operation
       fi
 
       # Checando se a entrada é numeral.
@@ -166,10 +178,10 @@ _MAIN() # Função que faz a rotina principal
       )
 
       ( # Abertura de subshell
-         cd $sound # Entrando no diretório sound
+         cd "$sound" # Entrando no diretório sons
          # Verificando se arquivo existe
          if [ ! -e "${show_me[$operation]}.ogg" ]; then
-             echo -e "\n${show_me[$operation]} não encontrado no diretório $sound."
+             echo -e "\n${show_me[$operation]} não encontrado no diretório ${dir[0]}."
              _SLEEP "$timer"
              return 1
          fi
@@ -178,10 +190,21 @@ _MAIN() # Função que faz a rotina principal
    done # Loop principal
 }
 
-
 #================= INICIO
-case $1 in
-    -s|--start) _MAIN ;;
-    -h|--help)  _HELP ;;
-    *) echo "Para visualizar a opção de ajuda utilize: prish -h ou prish --help"
-esac
+# Imprimir o logo de inicio?
+if [ "$show_me_logo" = '0' ]; then
+   cat "${dir[3]}/${logo}.logo" # Printa pra noix
+   if [ "$show_me_slogan" = "0" ]; then # efeito write ta habilitado?
+       echo "$slogan" | pv -qL 20 # Imprimindo slogan
+   else
+       echo "$slogan"
+   fi
+   timer=$(($timer-1)) # Diminuindo tempo para o sleep.
+   sleep "$timer"
+fi
+
+if [ "$1" = "" ]; then
+    _MAIN
+elif [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    _PRINT "${doc}/help.txt"
+fi

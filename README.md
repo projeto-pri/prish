@@ -17,6 +17,8 @@ https://youtu.be/SLZFqMDMtJQ
 ## Como instalar?
 
 
+## Formato dos áudios
+Todos os áudios estão utilizando o padrão ogg vorbis.
 
 ## Por que em Shell?
 Por ser simples e direto, você necessita de uma distribuição GNU/Linux que graças ao movimento da tecnologia não é preciso nem estar instalado no sistema.
@@ -24,7 +26,7 @@ Basta plugar a sua LIVEcd baixar o **PRIsh** e por o bash para interpretar. Fác
 
 
 ## Site do Projeto
-
+https://projeto-pri.github.io/
 
 ## Como contribuir?
 - Codando
