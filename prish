@@ -21,7 +21,7 @@
 
 #================= VARIÁVEIS
 name='prish'              # Nome do Projeto
-version='0.6'             # Versão
+version='0.6a'             # Versão
 
 #================= TEST
 # Carregamento de variáveis!
@@ -191,6 +191,9 @@ _MAIN() # Função que faz a rotina principal
 }
 
 #================= INICIO
+# Ajuda foi chamada?
+[ "$1" = "-h" ] || [ "$1" = "--help" ] && { _PRINT "${dir[1]}/help.txt"; exit 0;}
+
 # Imprimir o logo de inicio?
 if [ "$show_me_logo" = '0' ]; then
    cat "${dir[3]}/${logo}.logo" # Printa pra noix
@@ -203,8 +206,6 @@ if [ "$show_me_logo" = '0' ]; then
    sleep "$timer"
 fi
 
-if [ "$1" = "" ]; then
-    _MAIN
-elif [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
-    _PRINT "${doc}/help.txt"
-fi
+# Chamando programa.
+[ "$1" = "" ] && _MAIN
+

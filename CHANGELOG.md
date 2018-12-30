@@ -1,3 +1,7 @@
+## Versão 0.6a ( Jefferson Rocha )
+- Arrumado bug da ajuda, o logo estava entrando antes da ajuda.
+- Concertado variável que chava função de ajuda, trocado por array. 
+
 ## Versão 0.6 ( Jefferson Rocha )
 - Adicionado função de escolha de vozes, agora contando com masculino e feminino.
   usuário pode controlar no arquivo de configuração.
