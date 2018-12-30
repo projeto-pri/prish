@@ -115,6 +115,64 @@ _SLEEP() # Função para adormecer em determinados momentos.
    sleep "$@"
 }
 
+_CLEAR_MENU()
+{
+   local menu="${dir[2]}/menu.txt"
+
+   while IFS= read print_me; do
+       if [[ "$print_me" =~ ^[[:space:]]*$ ]]; then # Linha vazia?
+           continue 
+       elif [[ ! "$print_me" =~ [a-zA-Z] ]]; then # Não começa com letras?
+           continue
+           # Tem espaço em qualquer quantidade no inicio?
+       elif [[ "$print_me" =~ ^[[:space:]]+{1,} ]]; then
+           print_me=$(echo "$print_me" | sed 's/^[[:space:]]*/ /g')
+       elif [[ "$print_me" =~ ^# ]]; then # Começa com # ? Não envie.
+           continue
+       fi
+           echo "${print_me}" >> "$*"
+       done < "$menu"
+}
+
+_MENU_CACHE()
+{
+   # O arquivo principal do cache é o menu.cache
+   # o arquivo menu.cache.comparation é apenas para fazer
+   # uma comparação limpa.
+   # menu.cache             = Arquivo de cache original.
+   # menu.cache.comparation = Cópia para fazer verificação.
+
+   # Inicializando variáveis
+   local menu="${dir[2]}/menu.txt"
+   local menucachecomparation="/tmp/menu.cache.comparation"
+   # Precisa ser global, precisa em uma parte do programa fora da função.
+   menucache="/tmp/menu.cache"
+
+   # Menu em cache existe?
+   if [ ! -e "$menucache" ]; then
+       _CLEAR_MENU "$menucache"
+       # Criando cópia exata.
+       cp "$menucache" "$menucachecomparation" || { echo "Erro de cópia de cache."; exit 1;}
+       echo "Menu Cache Criado."
+       exit
+   else
+       # Atualizando menucachecomparation para verificar se é igual ao cache.
+       rm -f "$menucachecomparation" &> /dev/null # Removendo o menu cache de comparação.
+       _CLEAR_MENU "$menucachecomparation"
+       # Arquivos são diferentes? vamos criar um cache então.
+       if ! diff "$menucache" "$menucachecomparation" &> /dev/null; then
+           rm -f "$menucache"
+           _CLEAR_MENU "$menucache" # Criando o novo menucache
+       else
+           echo "Menu Cache foi carregado."
+           timer=$(($timer - 1)) # Diminuindo tempo
+           sleep "$timer"
+           clear
+           return 0
+       fi     
+   fi
+}
+
 _MAIN() # Função que faz a rotina principal
 {
    # Declarações de variaveis locais
@@ -127,20 +185,10 @@ _MAIN() # Função que faz a rotina principal
       # Printando na tela
           while IFS= read -r print_me; do
              i=$((i+1))
-             # Algumas verificações na linha antes de imprimir
-             if [[ "$print_me" =~ ^[[:space:]]*$ ]]; then # Linha vazia?
-                 { i=$((i-1));continue;}
-             elif [[ ! "$print_me" =~ [a-zA-Z] ]]; then   # Não começa com Letras?
-                 { i=$((i-1));continue;}
-             elif [[ "$print_me" =~ ^[[:space:]]+{1,} ]]; then # Tem espaço em qualquer quantidade no inicio?
-                 print_me=$(echo "$print_me" | sed 's/^[[:space:]]*/ /g')
-             elif [[ "$print_me" =~ ^# ]]; then # Inicio da linha com # ? Não imprima.
-                 { i=$((i-1)); continue;}
-             fi
              echo -e "${bgmenu}\[ ${i} ]${endcolor} ${txtcolor} $print_me ${endcolor}" # Imprimindo com incremento.
              show_me[$i]="$print_me" # pegando no vetor todas opções
              [ "$i" = "$limit_menu" ] && break # Verficando o limite máximo do menu.
-          done < "$menu"
+          done < "$menucache" # Carregando o menu cache.
 
       # Verificando se o limit_menu é maior que 9
       # Se for precisamos de duas casas númericas no STDIN.
@@ -170,7 +218,7 @@ _MAIN() # Função que faz a rotina principal
       show_me[$operation]=$(
            echo "${show_me[$operation]}" |
            sed '
-             s/áÁàÀãÃâÂéÉêÊíÍóÓõÕôÔúÚüÜçÇ/aAaAaAaAeEeEiIoOoOoOuUuUcC/ ;
+             y/áÁàÀãÃâÂéÉêÊíÍóÓõÕôÔúÚüÜçÇ/aAaAaAaAeEeEiIoOoOoOuUuUcC/ ;
              s/[,.;?!]//g ;                           
              s/^[[:space:]]*//;                           
              s/ /-/g;
@@ -194,11 +242,16 @@ _MAIN() # Função que faz a rotina principal
 # Ajuda foi chamada?
 [ "$1" = "-h" ] || [ "$1" = "--help" ] && { _PRINT "${dir[1]}/help.txt"; exit 0;}
 
+# Chamando a função menu cache
+_MENU_CACHE
+
 # Imprimir o logo de inicio?
 if [ "$show_me_logo" = '0' ]; then
    cat "${dir[3]}/${logo}.logo" # Printa pra noix
    if [ "$show_me_slogan" = "0" ]; then # efeito write ta habilitado?
-       echo "$slogan" | pv -qL 20 # Imprimindo slogan
+       paplay "${dir[0]}/ambiente/entrada.ogg" &
+       echo "$slogan" | pv -qL 12 # Imprimindo slogan
+       sleep 1s
    else
        echo "$slogan"
    fi

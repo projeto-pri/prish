@@ -1,28 +1,27 @@
 ######################## SAUDAÇÕES
-     Oi, tudo bem?
- Bom dia!
- Boa tarde! 
- Boa noite!
+# Oi, tudo bem?
+# Bom dia!
+#Boa tarde! 
+# Boa noite!
  Como foi seu dia?
- Obrigado!
-# Obrigada!
-# Tchau
-# Até logo
+#Obrigado!
+ Tchau
 
 ######################## BÁSICO
  Estou com Fome
  Estou com Frio
 # Estou com Sede
-# Eu preciso usar o banheiro
-# Eu preciso tomar banho
-# Eu preciso tomar remédio
-# Ligue a televisão
-# Desligue a televisão
+ Eu preciso usar o banheiro
+ Eu preciso tomar banho
+ Eu preciso tomar remédio
+ Ligue a televisão
+ Desligue a televisão
 # Mude de canal
 # Diminua a temperatura do ar condicionado
 # Aumente a temperatura do ar condicionado
 # Desligue o ar condicionado
 # Me ajude a mudar de posição
+ Está posição está me machucando
 # Eu preciso dormir
 # Chame o médico por favor
 # Chame a enfermeira por favor
