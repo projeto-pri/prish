@@ -21,14 +21,6 @@ https://youtu.be/SLZFqMDMtJQ
 ## Como instalar?
 
 
-## Formato dos áudios
-Todos os áudios estão utilizando o padrão ogg vorbis.
-
-## Por que em Shell?
-Por ser simples e direto, você necessita de uma distribuição GNU/Linux que graças ao movimento da tecnologia não é preciso nem estar instalado no sistema.
-Basta plugar a sua LIVEcd baixar o **PRIsh** e por o bash para interpretar. Fácil não é? O resto deixa que o programa faz.
-
-
 ## Site do Projeto
 https://projeto-pri.github.io/
 
@@ -38,7 +30,6 @@ https://projeto-pri.github.io/
 - Com ideias
 - Com Doações (Destinada para montar simples equipamentos e doar a hospitais ou pessoas que necessitam)
 - Ajudando na divulgação, assim o projeto chega a quem precisa
-
 
 ## Changelog
 https://github.com/projeto-pri/prish/blob/master/CHANGELOG.md
