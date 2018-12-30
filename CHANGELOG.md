@@ -1,3 +1,6 @@
+## Versão 1.0 ( Jefferson Rocha )
+- Reeconstruido a forma como o menu é imprimido na tela. Agora ele tem 1 menu com subcategorias.
+
 ## Versão 0.6a ( Jefferson Rocha )
 - Arrumado bug da ajuda, o logo estava entrando antes da ajuda.
 - Concertado variável que chava função de ajuda, trocado por array. 

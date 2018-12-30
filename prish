@@ -17,11 +17,11 @@
 #====================================================================|
 
 #================= BIBLIOTECAS
-. prish.conf # Carregando arquivo de configuração do sistema
+. prish.conf          # Carregando arquivo de configuração do sistema
 
 #================= VARIÁVEIS
 name='prish'              # Nome do Projeto
-version='0.6a'             # Versão
+version='1.0'             # Versão
 
 #================= TEST
 # Carregamento de variáveis!
@@ -66,7 +66,7 @@ fi
 dir=(
     "sons"
     "documentacao"
-    "menu"
+    "modulo"
     "logo"
 )
 
@@ -115,93 +115,45 @@ _SLEEP() # Função para adormecer em determinados momentos.
    sleep "$@"
 }
 
-_CLEAR_MENU()
+_PRINT_ME()
 {
-   local menu="${dir[2]}/menu.txt"
-
+   clear
+   i='0' # var de incremento.
+   # Printando na tela
    while IFS= read print_me; do
-       if [[ "$print_me" =~ ^[[:space:]]*$ ]]; then # Linha vazia?
-           continue 
-       elif [[ ! "$print_me" =~ [a-zA-Z] ]]; then # Não começa com letras?
-           continue
-           # Tem espaço em qualquer quantidade no inicio?
-       elif [[ "$print_me" =~ ^[[:space:]]+{1,} ]]; then
-           print_me=$(echo "$print_me" | sed 's/^[[:space:]]*/ /g')
-       elif [[ "$print_me" =~ ^# ]]; then # Começa com # ? Não envie.
-           continue
-       fi
-           echo "${print_me}" >> "$*"
-       done < "$menu"
-}
-
-_MENU_CACHE()
-{
-   # O arquivo principal do cache é o menu.cache
-   # o arquivo menu.cache.comparation é apenas para fazer
-   # uma comparação limpa.
-   # menu.cache             = Arquivo de cache original.
-   # menu.cache.comparation = Cópia para fazer verificação.
-
-   # Inicializando variáveis
-   local menu="${dir[2]}/menu.txt"
-   local menucachecomparation="/tmp/menu.cache.comparation"
-   # Precisa ser global, precisa em uma parte do programa fora da função.
-   menucache="/tmp/menu.cache"
-
-   # Menu em cache existe?
-   if [ ! -e "$menucache" ]; then
-       _CLEAR_MENU "$menucache"
-       # Criando cópia exata.
-       cp "$menucache" "$menucachecomparation" || { echo "Erro de cópia de cache."; exit 1;}
-       echo "Menu Cache Criado."
-       exit
-   else
-       # Atualizando menucachecomparation para verificar se é igual ao cache.
-       rm -f "$menucachecomparation" &> /dev/null # Removendo o menu cache de comparação.
-       _CLEAR_MENU "$menucachecomparation"
-       # Arquivos são diferentes? vamos criar um cache então.
-       if ! diff "$menucache" "$menucachecomparation" &> /dev/null; then
-           rm -f "$menucache"
-           _CLEAR_MENU "$menucache" # Criando o novo menucache
-       else
-           echo "Menu Cache foi carregado."
-           timer=$(($timer - 1)) # Diminuindo tempo
-           sleep "$timer"
-           clear
-           return 0
-       fi     
-   fi
+       i=$((i+1))
+       echo -e "${bgmenu}[ ${i} ]${endcolor} ${txtcolor} $print_me ${endcolor}" # Imprimindo com incremento.
+       show_me[$i]="$print_me" # pegando no vetor todas opções
+       [ "$i" = "$limit_menu" ] && break # Verficando o limite máximo do menu.
+   done < "$*"
 }
 
 _MAIN() # Função que faz a rotina principal
 {
-   # Declarações de variaveis locais
-   local menu='menu/menu.txt'
+   dir="modulo" # Diretório principal dos modulos
+   mod_dir=(    # Lista das bibliotecas de submenus
+       "${dir}/principal.lib"   # 0
+       "${dir}/basico.lib"      # 1
+       "${dir}/dor.lib"         # 2
+       "${dir}/eu-preciso.lib"  # 3
+       "${dir}/eu-quero.lib"    # 4
+       "${dir}/perguntas.lib"   # 5
+       "${dir}/respostas.lib"   # 6
+       "${dir}/saudacoes.lib"   # 7 
+       "${dir}/sentimentos.lib" # 8
+       "${dir}/basico.lib"      # 9
+   )
 
    while :; do
+      choice="${mod_dir[0]}" # Menu principal.
       # Verificando se chaves estão ligadas.
       clear # Limpa a tela ae
-      i='0' # var de incremento.
-      # Printando na tela
-          while IFS= read -r print_me; do
-             i=$((i+1))
-             echo -e "${bgmenu}\[ ${i} ]${endcolor} ${txtcolor} $print_me ${endcolor}" # Imprimindo com incremento.
-             show_me[$i]="$print_me" # pegando no vetor todas opções
-             [ "$i" = "$limit_menu" ] && break # Verficando o limite máximo do menu.
-          done < "$menucache" # Carregando o menu cache.
-
-      # Verificando se o limit_menu é maior que 9
-      # Se for precisamos de duas casas númericas no STDIN.
-      if [ "$limit_menu" -gt "9" ]; then
-          # Limitado a 2 casas para não precisar de enter.
-          read -n 2 -p $'\n' operation
-      else      
-          # STDIN limitada a 1 caractere.
-          # Ou seja opção 10 11 20 50 não funciona e sim de 0-9.
-          # Isto para quando a pessoa apertar o número já ir automaticamente
-          # sem necessitar do enter.
-          read -n 1 -p $'\n' operation
-      fi
+      _PRINT_ME "$choice" # Função para printar na tela.
+      # STDIN limitada a 1 caractere.
+      # Ou seja opção 10 11 20 50 não funciona e sim de 0-9.
+      # Isto para quando a pessoa apertar o número já ir automaticamente
+      # sem necessitar do enter.
+      read -n 1 -p $'\n' operation
 
       # Checando se a entrada é numeral.
       if ! [ "$operation" -eq "$operation" ] 2>/dev/null; then
@@ -209,7 +161,21 @@ _MAIN() # Função que faz a rotina principal
           _SLEEP "$timer"
           continue
       fi
+      # Verificando qual opção o usuário escolheu ;)
+      case $operation in
+          1) choice="${mod_dir[1]}";;
+          2) choice="${mod_dir[2]}";;
+          3) choice="${mod_dir[3]}";;
+          4) choice="${mod_dir[4]}";;
+          5) choice="${mod_dir[5]}";;
+          6) choice="${mod_dir[6]}";;
+          7) choice="${mod_dir[7]}";;
+          8) choice="${mod_dir[8]}";;
+      esac
       
+      _PRINT_ME "${choice}"
+      read -n 1 -p $'\n' operation
+
       # Convertendo toda entrada em minusculo
       show_me[$operation]=${show_me[$operation],,}
 
@@ -241,9 +207,6 @@ _MAIN() # Função que faz a rotina principal
 #================= INICIO
 # Ajuda foi chamada?
 [ "$1" = "-h" ] || [ "$1" = "--help" ] && { _PRINT "${dir[1]}/help.txt"; exit 0;}
-
-# Chamando a função menu cache
-_MENU_CACHE
 
 # Imprimir o logo de inicio?
 if [ "$show_me_logo" = '0' ]; then
