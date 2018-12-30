@@ -19,6 +19,26 @@
 #================= BIBLIOTECAS
 . prish.conf # Carregando arquivo de configuração do sistema
 
+#================= CONSTANTES
+
+PRETO='\e[30;1m'
+VERMELHO='\e[31;1m'
+VERDE='\e[32;1m'
+AMARELO='\e[33;1m'
+AZUL='\e[34;1m'
+ROSA='\e[35;1m'
+CIANO='\e[36;1m'
+BRANCO='\e[37;1m'
+
+VERMELHO_BRANCO='\e[37;41;1m'
+AZUL_BRANCO='\e[37;44;1m'
+AMARELO_PRETO='\e[30;43m'
+PRETO_AMARELO='\e[33;40;1m'
+VERDE_VERMELHO='\e[31;42;1m'
+CYANO_PRETO='\e[30;46;1m'
+
+FIM='\e[m'
+
 #================= VARIÁVEIS
 name='prish'              # Nome do Projeto
 version='0.5'             # Versão
@@ -42,24 +62,24 @@ menu='menu'               # Diretório do menu
 # no arquivo de configuração.
 if [ "$color_key" = "0" ]; then
    case $color_number in # Fundo/cor Númerico
-       1) bgmenu='\e[37;41;1m';; # Fundo Vermelho com letra Branca
-       2) bgmenu='\e[37;44;1m';; # Fundo Azul com letra Branca
-       3) bgmenu='\e[30;43m'  ;; # Fundo Amarelo com letra Preta
-       4) bgmenu='\e[33;40;1m';; # Fundo Preto com letra Amarela
-       5) bgmenu='\e[31;42;1m';; # Fundo Verde com letra Vermelha
-       6) bgmenu='\e[30;46;1m';; # Fundo Cyano com letra Preta
+       1) bgmenu=${VERMELHO_BRANCO};; # Fundo Vermelho com letra Branca
+       2) bgmenu=${AZUL_BRANCO};; # Fundo Azul com letra Branca
+       3) bgmenu=${AMARELO_PRETO}  ;; # Fundo Amarelo com letra Preta
+       4) bgmenu=${PRETO_AMARELO};; # Fundo Preto com letra Amarela
+       5) bgmenu=${VERDE_VERMELHO};; # Fundo Verde com letra Vermelha
+       6) bgmenu=${CYANO_PRETO};; # Fundo Cyano com letra Preta
    esac
    case $color_text in # Cor texto
-      1) txtcolor='\e[30;1m';; # Preto
-      2) txtcolor='\e[31;1m';; # Vermelho
-      3) txtcolor='\e[32;1m';; # Verde
-      4) txtcolor='\e[33;1m';; # Amarelo
-      5) txtcolor='\e[34;1m';; # Azul
-      6) txtcolor='\e[35;1m';; # Rosa
-      7) txtcolor='\e[36;1m';; # Ciano
-      8) txtcolor='\e[37;1m';; # Branco
+      1) txtcolor=${PRETO};; # Preto
+      2) txtcolor=${VERMELHO};; # Vermelho
+      3) txtcolor=${VERDE};; # Verde
+      4) txtcolor=${AMARELO};; # Amarelo
+      5) txtcolor=${AZUL};; # Azul
+      6) txtcolor=${ROSA};; # Rosa
+      7) txtcolor=${CIANO};; # Ciano
+      8) txtcolor=${BRANCO};; # Branco
    esac
-   endcolor='\e[m' # Fechamento da cor.
+   endcolor=${FIM} # Fechamento da cor.
 fi
 
 
