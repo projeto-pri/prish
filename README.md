@@ -17,6 +17,9 @@ Foi ai que surgiu a ideia deste software livre, um simples script em shell que t
 ## A história de tudo isso
 https://youtu.be/SLZFqMDMtJQ
 
+## Dependências
+- bash >= 3.0
+- pv   >= 1.6.6 
 
 ## Como instalar?
 
