@@ -6,7 +6,9 @@ Um exemplo é um pessoa que sofreu algum tipo de AVC, normalmente a pessoa apesa
 
 Foi ai que surgiu a ideia deste software livre, um simples script em shell que tem frases pré-definidas e um menu que é personalizado com frases, basta apertar um número que a frase é dita.
 
-![PRIsh Logo](prish.png){:height="50%" width="50%"}
+
+![PRIsh Logo](prish.png)
+
 
 ## Coisas que você precisa saber
 - 100% Software Livre. Não é utilizado nenhuma ferramenta ou utilitário no desenvolvimento do **PRIsh** que seja software fechado.
