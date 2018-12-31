@@ -1,3 +1,7 @@
+## Versão 1.0a ( Jefferson Rocha )
+- Adicionado localização de navegação, acima do menu.
+- Agora quando a voz é executada é feita em segundo plano para ser mais ágil.
+
 ## Versão 1.0 ( Jefferson Rocha )
 - Reeconstruido a forma como o menu é imprimido na tela. Agora ele tem 1 menu com subcategorias.
 

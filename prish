@@ -21,7 +21,7 @@
 
 #================= VARIÁVEIS
 name='prish'              # Nome do Projeto
-version='1.0'             # Versão
+version='1.0a'             # Versão
 
 #================= TEST
 # Carregamento de variáveis!
@@ -117,8 +117,12 @@ _SLEEP() # Função para adormecer em determinados momentos.
 
 _PRINT_ME()
 {
-   clear
    i='0' # var de incremento.
+   clear
+   echo -e "         \e[36;1m$mylocal\e[m"  
+   echo "└─────────────────────────┘"
+   echo
+
    # Printando na tela
    while IFS= read print_me; do
        i=$((i+1))
@@ -134,17 +138,33 @@ _MAIN() # Função que faz a rotina principal
    mod_dir=(    # Lista das bibliotecas de submenus
        "${dir}/principal.lib"   # 0
        "${dir}/basico.lib"      # 1
-       "${dir}/dor.lib"         # 2
-       "${dir}/eu-preciso.lib"  # 3
-       "${dir}/eu-quero.lib"    # 4
-       "${dir}/perguntas.lib"   # 5
-       "${dir}/respostas.lib"   # 6
-       "${dir}/saudacoes.lib"   # 7 
-       "${dir}/sentimentos.lib" # 8
-       "${dir}/basico.lib"      # 9
+       "${dir}/saudacoes.lib"   # 2
+       "${dir}/sentimentos.lib" # 3
+       "${dir}/perguntas.lib"   # 4
+       "${dir}/respostas.lib"   # 5
+       "${dir}/dor.lib"         # 6
+       "${dir}/eu-quero.lib"    # 7
+       "${dir}/eu-preciso.lib"  # 8 
    )
+   
+   # lista do menu principal para inserir
+   # dentro da var choice, logo abaixo!
+   imhere=(
+       "Principal"    # 0
+       "Básico"       # 1
+       "Saudações"    # 2
+       "Sentimentos"  # 3
+       "Perguntas"    # 4
+       "Respostas"    # 5
+       "Dor"          # 6
+       "Eu Quero"     # 7
+       "Eu Preciso"   # 8
+   )   
 
    while :; do
+      # Iniciando Var de localização que é exibido
+      # em cima do menu.
+      mylocal="Principal"
       choice="${mod_dir[0]}" # Menu principal.
       # Verificando se chaves estão ligadas.
       clear # Limpa a tela ae
@@ -161,21 +181,21 @@ _MAIN() # Função que faz a rotina principal
           _SLEEP "$timer"
           continue
       fi
-      # Verificando qual opção o usuário escolheu ;)
+      # Verificando qual opção o usuário escolheu
+      # e tbm indicando a localização do usuário
       case $operation in
-          1) choice="${mod_dir[1]}";;
-          2) choice="${mod_dir[2]}";;
-          3) choice="${mod_dir[3]}";;
-          4) choice="${mod_dir[4]}";;
-          5) choice="${mod_dir[5]}";;
-          6) choice="${mod_dir[6]}";;
-          7) choice="${mod_dir[7]}";;
-          8) choice="${mod_dir[8]}";;
+          1) choice="${mod_dir[1]}"; mylocal="${imhere[1]}";;
+          2) choice="${mod_dir[2]}"; mylocal="${imhere[2]}";;
+          3) choice="${mod_dir[3]}"; mylocal="${imhere[3]}";;
+          4) choice="${mod_dir[4]}"; mylocal="${imhere[4]}";;
+          5) choice="${mod_dir[5]}"; mylocal="${imhere[5]}";;
+          6) choice="${mod_dir[6]}"; mylocal="${imhere[6]}";;
+          7) choice="${mod_dir[7]}"; mylocal="${imhere[7]}";;
+          8) choice="${mod_dir[8]}"; mylocal="${imhere[8]}";;
       esac
       
       _PRINT_ME "${choice}"
       read -n 1 -p $'\n' operation
-
       # Convertendo toda entrada em minusculo
       show_me[$operation]=${show_me[$operation],,}
 
@@ -199,7 +219,7 @@ _MAIN() # Função que faz a rotina principal
              _SLEEP "$timer"
              return 1
          fi
-         paplay ${show_me[$operation]}.ogg # Tudo ocorreu bem? Então toca.
+         paplay ${show_me[$operation]}.ogg & # Tudo ocorreu bem? Então toca.
       )
    done # Loop principal
 }
@@ -221,7 +241,7 @@ if [ "$show_me_logo" = '0' ]; then
    timer=$(($timer-1)) # Diminuindo tempo para o sleep.
    sleep "$timer"
 fi
-
+clear
 # Chamando programa.
 [ "$1" = "" ] && _MAIN
 
