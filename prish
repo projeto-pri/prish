@@ -21,27 +21,27 @@
 
 #================= CONSTANTES
 
-BLACK='\e[30;1m'		# Preto
-RED='\e[31;1m'			# Vermelho
-GREEN='\e[32;1m'		# Verde
-YELLOW='\e[33;1m'		# Amarelo
-BLUE='\e[34;1m'			# Azul
-PINK='\e[35;1m'			# Rosa
-CYAN='\e[36;1m'			# Ciano
-WHITE='\e[37;1m'		# Branco
+readonly BLACK='\e[30;1m'	        # Preto
+readonly RED='\e[31;1m'			    # Vermelho
+readonly GREEN='\e[32;1m'		    # Verde
+readonly YELLOW='\e[33;1m'		    # Amarelo
+readonly BLUE='\e[34;1m'		    # Azul
+readonly PINK='\e[35;1m'		    # Rosa
+readonly CYAN='\e[36;1m'		    # Ciano
+readonly WHITE='\e[37;1m'	        # Branco
 
-RED_WHITE='\e[37;41;1m'		# Vermelho e Branco
-BLUE_WHITE='\e[37;44;1m'	# Azul e Branco
-YELLOW_BLACK='\e[30;43m'	# Amarelo e Preto
-BLACK_YELLOW='\e[33;40;1m'	# Preto e Amarelo
-GREEN_RED='\e[31;42;1m'		# Verde e Vermelho
-CYAN_BLACK='\e[30;46;1m'	# Ciano e Preto
+readonly RED_WHITE='\e[37;41;1m'    # Vermelho e Branco
+readonly BLUE_WHITE='\e[37;44;1m'	# Azul e Branco
+readonly YELLOW_BLACK='\e[30;43m'	# Amarelo e Preto
+readonly BLACK_YELLOW='\e[33;40;1m'	# Preto e Amarelo
+readonly GREEN_RED='\e[31;42;1m'    # Verde e Vermelho
+readonly CYAN_BLACK='\e[30;46;1m'	# Ciano e Preto
 
-END='\e[m'			# Fechamento das cores
+readonly END='\e[m'     			# Fechamento das cores
 
 #================= VARIÁVEIS
 name='prish'              # Nome do Projeto
-version='1.0a'             # Versão
+version='1.1'             # Versão
 
 #================= TEST
 # Carregamento de variáveis!
@@ -58,7 +58,7 @@ version='1.0a'             # Versão
 # Se sim vamos puxar qual o valor o usuario(a) definiu
 # no arquivo de configuração.
 if [ "$color_key" = "0" ]; then
-   case $color_number in		# Fundo/cor Númerico
+   case $color_number in		    # Fundo/cor Númerico
        1) bgmenu=${RED_WHITE};;		# Fundo Vermelho com letra Branca
        2) bgmenu=${BLUE_WHITE};;	# Fundo Azul com letra Branca
        3) bgmenu=${YELLOW_BLACK};;	# Fundo Amarelo com letra Preta
@@ -66,14 +66,14 @@ if [ "$color_key" = "0" ]; then
        5) bgmenu=${GREEN_RED};;		#Fundo Verde com letra Vermelha
        6) bgmenu=${CYAN_BLACK};;	# Fundo Cyano com letra Preta
    esac
-   case $color_text in # Cor texto
+   case $color_text in              # Cor texto
       1) txtcolor=${BLACK};;		# Preto
-      2) txtcolor=${RED};;		# Vermelho
+      2) txtcolor=${RED};;		    # Vermelho
       3) txtcolor=${GREEN};;		# Verde
       4) txtcolor=${YELLOW};;		# Amarelo
-      5) txtcolor=${BLUE};;		# Azul
-      6) txtcolor=${PINK};;		# Rosa
-      7) txtcolor=${CYAN};;		# Ciano
+      5) txtcolor=${BLUE};;		    # Azul
+      6) txtcolor=${PINK};;		    # Rosa
+      7) txtcolor=${CYAN};;		    # Ciano
       8) txtcolor=${WHITE};;		# Branco
    esac
    endcolor=${END}			# Fechamento da cor.
@@ -100,6 +100,8 @@ done
 dep=(
    'paplay'
    'pv'
+   'mutt'
+   'wget'
 )
 
 # Loop para varrer a array atrás das deps.
@@ -135,87 +137,81 @@ _SLEEP() # Função para adormecer em determinados momentos.
    sleep "$@"
 }
 
-_PRINT_ME()
+_IMHERE()
+{
+   dir="modulo" # Diretório principal dos modulos
+   mod_dir=(    # Lista das bibliotecas de submenus
+       "${dir}/principal.menu"              # 0
+       "${dir}/necessidades.menu"           # 1
+       "${dir}/saudacoes.menu"              # 2
+       "${dir}/sentimentos-bons.menu"       # 3
+       "${dir}/sentimentos-ruins.menu"      # 4
+       "${dir}/eu-quero.menu"               # 5
+       "${dir}/perguntas.menu"              # 6
+       "${dir}/respostas.menu"              # 7
+       "${dir}/desejos.menu"                # 8
+       "${dir}/dor.menu"                    # 9
+   )
+
+   # Aonde estou? Exibido no menu principal.
+   # Este pega da array acima a posição e vai limpando até chegar no resultado ;)
+   i="0"
+   for here in "${mod_dir[@]}"; do
+       imhere[$i]=$(echo "$here" | cut -d '/' -f 2 | cut -d '.' -f 1)
+       if [ "$i" -eq "0" ]; then
+           imhere[$i]="${imhere[$i]}"
+           imhere[$i]="${imhere[$i]^}" # Upper
+           i=$(($i + 1))
+           continue
+       fi
+       imhere[$i]="${imhere[$i]}"
+       imhere[$i]="${imhere[$i]^}" # Upper
+       i=$(($i + 1))
+   done
+}
+
+_PRINT_ME() # Printa na tela todos os menus.
 {
    i='0' # var de incremento.
    clear
-   echo -e "         \e[36;1m$mylocal\e[m"  
+   echo -e "  \e[36;1m$mylocal\e[m"  
    echo "└─────────────────────────┘"
    echo
 
    # Printando na tela
    while IFS= read print_me; do
-       i=$((i+1))
        echo -e "${bgmenu}[ ${i} ]${endcolor} ${txtcolor} $print_me ${endcolor}" # Imprimindo com incremento.
        show_me[$i]="$print_me" # pegando no vetor todas opções
+       i=$((i+1)) # Incremento
        [ "$i" = "$limit_menu" ] && break # Verficando o limite máximo do menu.
    done < "$*"
+
+   # Se for principal o ENTER é para Sair, de resto é VOLTAR
+   if [ "$mylocal" = "${imhere[0]}" ]; then
+       text="Sair"
+       echo -e "\n${bgmenu}[ ENTER ]${endcolor} ${txtcolor} $text ${endcolor}" # Imprimindo com incremento.
+   else
+       text="Voltar"
+       echo -e "\n${bgmenu}[ ENTER ]${endcolor} ${txtcolor} $text ${endcolor}" # Imprimindo com incremento.
+   fi
 }
 
-_MAIN() # Função que faz a rotina principal
+_PLAY() # Função de tocar o audio
 {
-   dir="modulo" # Diretório principal dos modulos
-   mod_dir=(    # Lista das bibliotecas de submenus
-       "${dir}/principal.lib"   # 0
-       "${dir}/basico.lib"      # 1
-       "${dir}/saudacoes.lib"   # 2
-       "${dir}/sentimentos.lib" # 3
-       "${dir}/perguntas.lib"   # 4
-       "${dir}/respostas.lib"   # 5
-       "${dir}/dor.lib"         # 6
-       "${dir}/eu-quero.lib"    # 7
-       "${dir}/eu-preciso.lib"  # 8 
-   )
-   
-   # lista do menu principal para inserir
-   # dentro da var choice, logo abaixo!
-   imhere=(
-       "Principal"    # 0
-       "Básico"       # 1
-       "Saudações"    # 2
-       "Sentimentos"  # 3
-       "Perguntas"    # 4
-       "Respostas"    # 5
-       "Dor"          # 6
-       "Eu Quero"     # 7
-       "Eu Preciso"   # 8
-   )   
-
-   while :; do
-      # Iniciando Var de localização que é exibido
-      # em cima do menu.
-      mylocal="Principal"
-      choice="${mod_dir[0]}" # Menu principal.
-      # Verificando se chaves estão ligadas.
-      clear # Limpa a tela ae
-      _PRINT_ME "$choice" # Função para printar na tela.
-      # STDIN limitada a 1 caractere.
-      # Ou seja opção 10 11 20 50 não funciona e sim de 0-9.
-      # Isto para quando a pessoa apertar o número já ir automaticamente
-      # sem necessitar do enter.
-      read -n 1 -p $'\n' operation
-
-      # Checando se a entrada é numeral.
-      if ! [ "$operation" -eq "$operation" ] 2>/dev/null; then
-          echo "Somente números."
-          _SLEEP "$timer"
-          continue
+   ( # Abertura de subshell
+      cd "$sound" # Entrando no diretório sons
+      # Verificando se arquivo existe
+      if [ ! -e "${show_me[$operation]}.ogg" ]; then
+         echo -e "\n${show_me[$operation]} não encontrado no diretório ${dir[0]}."
+         _SLEEP "$timer"
+         return 1
       fi
-      # Verificando qual opção o usuário escolheu
-      # e tbm indicando a localização do usuário
-      case $operation in
-          1) choice="${mod_dir[1]}"; mylocal="${imhere[1]}";;
-          2) choice="${mod_dir[2]}"; mylocal="${imhere[2]}";;
-          3) choice="${mod_dir[3]}"; mylocal="${imhere[3]}";;
-          4) choice="${mod_dir[4]}"; mylocal="${imhere[4]}";;
-          5) choice="${mod_dir[5]}"; mylocal="${imhere[5]}";;
-          6) choice="${mod_dir[6]}"; mylocal="${imhere[6]}";;
-          7) choice="${mod_dir[7]}"; mylocal="${imhere[7]}";;
-          8) choice="${mod_dir[8]}"; mylocal="${imhere[8]}";;
-      esac
-      
-      _PRINT_ME "${choice}"
-      read -n 1 -p $'\n' operation
+      paplay ${show_me[$operation]}.ogg & # Tudo ocorreu bem? Então toca.
+   )
+}
+
+_CURE() # Função para tratamento da string de seleção para executar o audio
+{ 
       # Convertendo toda entrada em minusculo
       show_me[$operation]=${show_me[$operation],,}
 
@@ -230,23 +226,93 @@ _MAIN() # Função que faz a rotina principal
              s/ /-/g;
              s/\r//g'
       )
+}
 
-      ( # Abertura de subshell
-         cd "$sound" # Entrando no diretório sons
-         # Verificando se arquivo existe
-         if [ ! -e "${show_me[$operation]}.ogg" ]; then
-             echo -e "\n${show_me[$operation]} não encontrado no diretório ${dir[0]}."
-             _SLEEP "$timer"
-             return 1
-         fi
-         paplay ${show_me[$operation]}.ogg & # Tudo ocorreu bem? Então toca.
-      )
+_SEND()
+{
+   [ "$send_mail" = "1" ] && { return 1 ;} # Net desabilitada.
+   muttrc="send_mail" # nome arquivo de configuração
+    cat > "$muttrc" <<END
+# Sobre
+set from="${email}"
+set realname="${realname}"
+
+# Credenciais
+set imap_user="${email}"
+set imap_pass="${password}"
+set smtp_url="smtps://${email}${server}"
+set smtp_pass="${password}"
+
+# Others
+set ssl_starttls=yes
+set ssl_force_tls=yes
+END
+   echo -e "\n${RED}Enviando pedido de socorro!${END}"
+   # Enviando email
+   mutt -s "Pedido de Socorro!" -F "${muttrc}" "${email}" <<< "Pedido de Socorro foi acionado às: $(date +%T)" &>/dev/null
+}
+
+_MAIN() # Função que faz a rotina principal
+{
+   while :; do
+      # Iniciando Var de localização que é exibido
+      # em cima do menu.
+      mylocal="${imhere[0]}"
+      choice="${mod_dir[0]}" # Menu principal.
+      # Verificando se chaves estão ligadas.
+      clear # Limpa a tela ae
+      _PRINT_ME "$choice" # Função para printar na tela.
+      # STDIN limitada a 1 caractere.
+      # Ou seja opção 10 11 20 50 não funciona e sim de 0-9.
+      # Isto para quando a pessoa apertar o número já ir automaticamente
+      # sem necessitar do enter.
+      read -n 1 -p $'\n' operation
+      [ -z "$operation" ] && exit
+
+      # Checando se a entrada é numeral.
+      if ! [ "$operation" -eq "$operation" ] 2>/dev/null; then
+          echo "Somente números."
+          _SLEEP "$timer"
+          continue
+      fi
+      # Verificando qual opção o usuário escolheu
+      # e tbm indicando a localização do usuário
+      case $operation in
+          0)
+            _SEND # Enviar Email
+            _CURE # Função para tratamento da string de seleção.
+            _PLAY # Toca audio
+            continue # Volta! ;)
+          ;;
+          1) choice="${mod_dir[1]}"; mylocal="${imhere[1]}";;
+          2) choice="${mod_dir[2]}"; mylocal="${imhere[2]}";;
+          3) choice="${mod_dir[3]}"; mylocal="${imhere[3]}";;
+          4) choice="${mod_dir[4]}"; mylocal="${imhere[4]}";;
+          5) choice="${mod_dir[5]}"; mylocal="${imhere[5]}";;
+          6) choice="${mod_dir[6]}"; mylocal="${imhere[6]}";;
+          7) choice="${mod_dir[7]}"; mylocal="${imhere[7]}";;
+          8) choice="${mod_dir[8]}"; mylocal="${imhere[8]}";;
+      esac
+      
+      _PRINT_ME "${choice}"
+      read -n 1 -p $'\n' operation
+      [ -z "$operation" ] && continue
+
+      _CURE # Função para tratamento da string de seleção.
+      _PLAY # Chamando função para tocar audio!
+
    done # Loop principal
 }
 
 #================= INICIO
 # Ajuda foi chamada?
 [ "$1" = "-h" ] || [ "$1" = "--help" ] && { _PRINT "${dir[1]}/help.txt"; exit 0;}
+
+# Se não tem internet no momento não enviar o email
+# de socorro, caso esteja habilitado.
+if ! wget -q --spider www.google.com &> /dev/null; then
+    send_mail="1"
+fi
 
 # Imprimir o logo de inicio?
 if [ "$show_me_logo" = '0' ]; then
@@ -262,6 +328,5 @@ if [ "$show_me_logo" = '0' ]; then
    sleep "$timer"
 fi
 clear
-# Chamando programa.
-[ "$1" = "" ] && _MAIN
-
+# Chamando a localização e função principal
+[ "$1" = "" ] && _IMHERE ; _MAIN
