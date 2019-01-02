@@ -1,3 +1,14 @@
+## Versão 1.1 ( Jefferson Rocha )
+- Agora todas opções vão de 0-9, assim ganhamos 1 decisão a mais no menu e submenus.
+- Iniciado o processo de modularização do programa.
+- Adicionado no menu principal "Pedido de Socorro". O mesmo envia a saída de voz e
+  um email para pessoa cadastrada.
+- Mutt agora é um dependência do PRISh.
+- Adicionado verificação se usuário tem internet, se não ter internet nã será enviado o 
+  pedido de socorro via email.
+- Adicionado opção de sair e voltar entre o menu.
+
+
 ## Versão 1.0a ( Jefferson Rocha )
 - Adicionado localização de navegação, acima do menu.
 - Agora quando a voz é executada é feita em segundo plano para ser mais ágil.

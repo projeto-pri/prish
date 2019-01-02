@@ -22,8 +22,11 @@ Foi ai que surgiu a ideia deste software livre, um simples script em shell que t
 https://youtu.be/SLZFqMDMtJQ
 
 ## Dependências
-- bash >= 3.0
-- pv   >= 1.6.6 
+- bash    >= 3.0
+- pv      >= 1.6.6
+- paplay  >= 9.0.0
+- mutt    >= 1.10.1
+- wget    >= 1.19.5
 
 ## Como instalar?
 
