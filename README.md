@@ -1,5 +1,7 @@
 # PRIsh ❤
 
+## Versão 1.1
+
 ## O que é PRIsh?
 Prish (Lê PRISHE) faz parte do **Projeto PRI**. É um utilitário em linha de comando criado em shell e visa ajudar as pessoas que estão passando por alguma necessidade fisica/mental e não consegue se comunicar com as pessoas.
 Um exemplo é um pessoa que sofreu algum tipo de AVC, normalmente a pessoa apesar de ter uma confusão mental consegue fazer leituras simples, também em alguns casos **que é o caso que se baseamos este projeto** estas pessoas conseguem movimentar alguma parte do corpo, o dedo por exemplo.
