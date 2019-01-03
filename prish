@@ -247,7 +247,7 @@ set smtp_pass="${password}"
 set ssl_starttls=yes
 set ssl_force_tls=yes
 END
-   echo -e "\n${RED}Enviando pedido de socorro!${END}"
+   [ "$send_mail" = "0" ] && echo -e "\n${RED}Enviando pedido de socorro!${END}"
    # Enviando email
    mutt -s "Pedido de Socorro!" -F "${muttrc}" "${email}" <<< "Pedido de Socorro foi acionado às: $(date +%T)" &>/dev/null
 }
@@ -321,19 +321,21 @@ case $1 in
     *) shift ;;
 esac
 
-# Se não tem internet no momento não enviar o email
-# de socorro, caso esteja habilitado.
-# Também verificamos se alguma das vars estão nulas.
-if ! wget --timeout=5 -q --spider www.google.com &> /dev/null; then
-    send_mail="1"
-elif [ -z email ]; then
-    send_mail="1"
-elif [ -z server ]; then
-    send_mail="1"
-elif [ -z password ]; then
-     send_mail="1"
-elif [ -z realname ]; then
-    realname='Programa PRIsh'
+if [ "$send_mail" = "0" ]; then 
+    # Se não tem internet no momento não enviar o email
+    # de socorro, caso esteja habilitado.
+    # Também verificamos se alguma das vars estão nulas.
+    if ! wget --timeout=5 -q --spider www.google.com &> /dev/null; then
+        send_mail="1"
+    elif [ -z $email ]; then
+        send_mail="1"
+    elif [ -z $server ]; then
+        send_mail="1"
+    elif [ -z $password ]; then
+         send_mail="1"
+    elif [ -z $realname ]; then
+        realname='Programa PRIsh'
+    fi
 fi
 
 # Imprimir o logo de inicio?
