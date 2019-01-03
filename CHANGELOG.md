@@ -1,3 +1,12 @@
+## Versão 1.1a ( Jefferson Rocha )
+- Adicionado verificação de variáveis de email
+- Adicionado timeout de 5s no wget, caso a internet esteja muito fraca, ele espera
+  o tempo de 5s e continua. Está opção afeta o "Pedido de socorro".
+- Adicionado parâmetro de telefones importantes (samu, bombeiros etc...) (-p, --phone).
+- Corrigido bug do parâmetro. Se passase qualquer parâmetro diferente do que tinha listado como
+  -h, --help etc... O programa iniciava bugado.
+- Diretório de documentação foi alterado para "arquivos_externos".
+
 ## Versão 1.1 ( Jefferson Rocha )
 - Agora todas opções vão de 0-9, assim ganhamos 1 decisão a mais no menu e submenus.
 - Iniciado o processo de modularização do programa.

@@ -40,8 +40,8 @@ readonly CYAN_BLACK='\e[30;46;1m'	# Ciano e Preto
 readonly END='\e[m'     			# Fechamento das cores
 
 #================= VARIÁVEIS
-name='prish'              # Nome do Projeto
-version='1.1'             # Versão
+name='prish'               # Nome do Projeto
+version='1.1a'             # Versão
 
 #================= TEST
 # Carregamento de variáveis!
@@ -83,9 +83,9 @@ fi
 # Conferindo se todos os diretórios principais existem!
 # Ao decorrer do program está lista é usada para ir criando
 # variáveis.
-dir=(
+main_dir=(
     "sons"
-    "documentacao"
+    "arquivos_externos"
     "modulo"
     "logo"
 )
@@ -116,11 +116,11 @@ done
 # Se não for setado nada o padrão é o masculino.
 voice=$(echo "$voice" | tr [A-Z] [a-z] ) # Tudo em lower
 if [ "$voice" = "m" ]; then
-    sound="${dir[0]}/masculino/"
+    sound="${main_dir[0]}/masculino/"
 elif [ "$voice" = "f" ]; then
-    sound="${dir[0]}/feminino/"
+    sound="${main_dir[0]}/feminino/"
 else
-    sound="${dir[0]}/masculino"
+    sound="${main_dir[0]}/masculino"
 fi
 
 #================= FUNCÕES
@@ -202,7 +202,7 @@ _PLAY() # Função de tocar o audio
       cd "$sound" # Entrando no diretório sons
       # Verificando se arquivo existe
       if [ ! -e "${show_me[$operation]}.ogg" ]; then
-         echo -e "\n${show_me[$operation]} não encontrado no diretório ${dir[0]}."
+         echo -e "\n${show_me[$operation]} não encontrado no diretório ${main_dir[0]}."
          _SLEEP "$timer"
          return 1
       fi
@@ -252,6 +252,14 @@ END
    mutt -s "Pedido de Socorro!" -F "${muttrc}" "${email}" <<< "Pedido de Socorro foi acionado às: $(date +%T)" &>/dev/null
 }
 
+_TEL()
+{
+   echo -e "Números Importantes\n"
+   echo -e "190    ${BLACK_YELLOW}Polícia Militar${END}"
+   echo -e "192    ${BLACK_YELLOW}SAMU${END}"
+   echo -e "193    ${BLACK_YELLOW}Corpo de Bombeiros${END}"
+}
+
 _MAIN() # Função que faz a rotina principal
 {
    while :; do
@@ -292,6 +300,7 @@ _MAIN() # Função que faz a rotina principal
           6) choice="${mod_dir[6]}"; mylocal="${imhere[6]}";;
           7) choice="${mod_dir[7]}"; mylocal="${imhere[7]}";;
           8) choice="${mod_dir[8]}"; mylocal="${imhere[8]}";;
+          9) choice="${mod_dir[9]}"; mylocal="${imhere[9]}";;
       esac
       
       _PRINT_ME "${choice}"
@@ -305,20 +314,33 @@ _MAIN() # Função que faz a rotina principal
 }
 
 #================= INICIO
-# Ajuda foi chamada?
-[ "$1" = "-h" ] || [ "$1" = "--help" ] && { _PRINT "${dir[1]}/help.txt"; exit 0;}
+# Verificando se existem parâmetros
+case $1 in
+    -h|--help)   { _PRINT "${main_dir[1]}/help.txt"; exit 0;} ;;
+    -p|--phone)  { _TEL; exit 0;}                             ;;
+    *) shift ;;
+esac
 
 # Se não tem internet no momento não enviar o email
 # de socorro, caso esteja habilitado.
-if ! wget -q --spider www.google.com &> /dev/null; then
+# Também verificamos se alguma das vars estão nulas.
+if ! wget --timeout=5 -q --spider www.google.com &> /dev/null; then
     send_mail="1"
+elif [ -z email ]; then
+    send_mail="1"
+elif [ -z server ]; then
+    send_mail="1"
+elif [ -z password ]; then
+     send_mail="1"
+elif [ -z realname ]; then
+    realname='Programa PRIsh'
 fi
 
 # Imprimir o logo de inicio?
 if [ "$show_me_logo" = '0' ]; then
-   cat "${dir[3]}/${logo}.logo" # Printa pra noix
+   cat "${main_dir[3]}/${logo}.logo" # Printa pra noix
    if [ "$show_me_slogan" = "0" ]; then # efeito write ta habilitado?
-       paplay "${dir[0]}/ambiente/entrada.ogg" &
+       paplay "${main_dir[0]}/ambiente/entrada.ogg" &
        echo "$slogan" | pv -qL 12 # Imprimindo slogan
        sleep 1s
    else
@@ -328,5 +350,5 @@ if [ "$show_me_logo" = '0' ]; then
    sleep "$timer"
 fi
 clear
-# Chamando a localização e função principal
-[ "$1" = "" ] && _IMHERE ; _MAIN
+
+_IMHERE ; _MAIN # Chamando a localização e função principal
